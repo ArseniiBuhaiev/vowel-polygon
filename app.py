@@ -25,6 +25,11 @@ l_spacer, col1, col2, right_spacer = st.columns([1, 3, 3, 1])
 with open("names.txt", "r", encoding="utf-8") as f:
     names = [name for name in f]
 
+with st.sidebar:
+    st.header("Налаштування графіка")
+    swap_axes = st.checkbox("Поміняти F1 та F2 місцями", value = False)
+    invert = st.checkbox("Інверсія F1", value=False)
+
 with col1:
     st.header("Додати мовця",  text_alignment="center", anchor=False)
 
@@ -70,9 +75,7 @@ with col1:
 
         if st.session_state.all_polygons:
             for idx, poly in enumerate(st.session_state.all_polygons):
-                # Створюємо розгортку для кожного мовця
                 with st.expander(f"👤 {poly.speaker}"):
-                    # Робимо заголовки таблиці
                     header_col1, header_col2, header_col3 = st.columns([1, 2, 2])
                     header_col1.write("**Звук**")
                     header_col2.write("**F1 (Hz)**")
@@ -100,17 +103,25 @@ with col2:
                   "#FF0095", "#9900FF", "#FF5100", "#6453FF", "#161616"]
         
         for i, poly in enumerate(st.session_state.all_polygons):
-            xpoints, ypoints = poly.get_x_y()
+            if not swap_axes:
+                xpoints, ypoints = poly.get_x_y()
+                ax.set_xlabel("F1", fontsize=9)
+                ax.set_ylabel("F2", fontsize=9)
+            else:
+                ypoints, xpoints = poly.get_x_y()
+                ax.set_xlabel("F2", fontsize=9)
+                ax.set_ylabel("F1", fontsize=9)
             vowels = [vwl.name for vwl in poly.vowels]
             plgn = ax.fill(xpoints, ypoints, "#FFFFFF00", label=poly.speaker, edgecolor=colors[i])
             ax.scatter(xpoints, ypoints, s=5)
             for i, vwl in enumerate(poly.vowels):
                 plt.text(xpoints[i], ypoints[i] + 15, vwl.name.upper(), fontsize=8)
         
-        ax.set_xlabel("F1", fontsize=9)
-        ax.set_ylabel("F2", fontsize=9)
-        if st.checkbox("Інвертувати осі"):
-            ax.invert_xaxis()
+        if invert:
+            if not swap_axes:
+                ax.invert_xaxis()
+            else:
+                ax.invert_yaxis()
         ax.grid(True, alpha=0.3)
         ax.legend(loc="lower right")
         st.pyplot(fig)
