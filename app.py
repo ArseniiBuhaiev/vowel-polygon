@@ -13,7 +13,11 @@ if "all_polygons" not in st.session_state:
     ish = FormantPolygon(speaker="За Іщенком", vowels=[a_ish, e_ish, y_ish, i_ish, u_ish, o_ish])
     st.session_state.all_polygons = [ish]
 
-st.set_page_config(page_title="Vowel Polygons", layout="wide")
+st.set_page_config(page_title="Генератор формантних полігонів (трикутників)",
+                   layout="wide",
+                   menu_items={
+                       'About': "Застосунок для побудови формантних полігонів голосних та порівняння з еталоном та між собою."
+                   })
 st.title("Генератор формантних полігонів".upper(), text_alignment="center", anchor=False)
 
 l_spacer, col1, col2, right_spacer = st.columns([1, 3, 3, 1])
@@ -105,6 +109,9 @@ with col2:
         
         ax.set_xlabel("F1", fontsize=9)
         ax.set_ylabel("F2", fontsize=9)
+        if st.checkbox("Інвертувати осі"):
+            ax.invert_xaxis()
+            ax.invert_yaxis()
         ax.grid(True, alpha=0.3)
         ax.legend(loc="lower right")
         st.pyplot(fig)
