@@ -111,7 +111,6 @@ with col2:
         ax.set_ylabel("F2", fontsize=9)
         if st.checkbox("Інвертувати осі"):
             ax.invert_xaxis()
-            ax.invert_yaxis()
         ax.grid(True, alpha=0.3)
         ax.legend(loc="lower right")
         st.pyplot(fig)
