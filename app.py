@@ -29,7 +29,7 @@ st.set_page_config(page_title="Формантний аналіз",
 
 st.header("Лабораторія фонетики", text_alignment="center", anchor=False)
 
-about, polygon_graph, analysis = st.tabs(["Про проєкт", "Візуалізація", "Аналіз даних"])
+about, polygon_graph, analysis = st.tabs(["Про проєкт", "Введення даних", "Аналіз"])
 
 with about:
     st.title("Формантний аналіз", text_alignment="center", anchor=False)
